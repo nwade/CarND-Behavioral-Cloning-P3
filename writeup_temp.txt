@@ -1,0 +1,22 @@
+Hypothesis: After a certain point of complexity, I suspect changing the model's architecture will yield less gains than dedicated focus on improving the input data (augmentation, processing, jittering, etc).
+
+Therefore, after building a simple version to prove all is well in the world, I intend to implement the NVIDIA stack and stick with it, prompty forgetting about it.
+
+I intend to use AWS from the start given my desired focus on data and lack of knowledge of tips and tricks to quickly check your model before training it for hours at a time only to find out it was crap.
+
+I intend to use Udacity's initial data for the simple model to get things happy. After that, I will add several other healthy laps and 1-2 recovery segment laps. Additionally, I will drive backwards for the same amount of data points at CW in hopes of balancing left to right steering.
+
+Check histogram or simple pie chart of left vs. right (positive vs negative) steering angles and hope they are roughly even for training set.
+
+Potential issue seen in advance: the system will probably want to go straight with bias (draft histogram of steering values). I predict it will focus on the middle and taper off to higher and low values. Can consider attempting to chop out some peaky data to get them closer together. Alternatively, can attempt to collect more data in curves, especially sharp ones.
+
+Early additions right after the simple model include using generators to load data in a memory-friendly fashion, aggressive image cropping, image downscaling for memory, data augmentation with negative value flipping.
+
+I predict this should be a decent driver on the first track. If I want to try the second track, I would probably collect equivalent data around the second track and retrain the model, focusing on duplicating efforts in any tricky turns or areas.
+
+
+
+Don't forget to visualize (graph) the loss history functions
+Definitely load data with generators
+
+Later additions if necessary could include adjusting image qualities like brightness, contrast, and adding jittering. Including other camera angles would work well too. Data augmentation like skewing, and rotations as well if desired.
