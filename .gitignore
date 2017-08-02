@@ -3,3 +3,5 @@ data
 mac_sim*
 .idea
 data.zip
+*.swp
+*.h5
