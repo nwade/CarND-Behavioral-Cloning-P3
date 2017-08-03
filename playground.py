@@ -2,7 +2,7 @@ import csv
 import cv2
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda
+from keras.layers import Flatten, Dense, Lambda, Cropping2D
 from keras.layers.convolutional import Conv2D
 from keras.layers.pooling import MaxPooling2D
 
@@ -53,7 +53,8 @@ y_train = np.array(measurements)
 
 model = Sequential()
 
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160, 320,3)))
+model.add(Cropping2D(cropping=((60,20), (0,0)), input_shape=(160,320,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5))
 model.add(Conv2D(6, (5,5), activation='relu'))
 model.add(MaxPooling2D())
 model.add(Conv2D(6, (5,5), activation='relu'))
@@ -68,12 +69,8 @@ model.fit(X_train, y_train, validation_split=0.2, shuffle=True, epochs=5, verbos
 
 model.save('model.h5')
 
-# Add normalization and mean centering using a Lambda
-# Augment data by flipping images with inverse values
 # Augment data with recovery laps showing only corrections
 # Build NVIDIA pipeline
-# Consider using other camera images
-# Crop and scale down images
 # Record extra laps
     # 2-3 good laps with center driving
     # 1 recovery lap
