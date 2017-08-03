@@ -5,6 +5,7 @@ from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Cropping2D
 from keras.layers.convolutional import Conv2D
 from keras.layers.pooling import MaxPooling2D
+import matplotlib.pyplot as plt
 
 images = []
 measurements = []
@@ -70,16 +71,23 @@ model.add(Dense(10))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True, epochs=5, verbose=1)
+history_object = model.fit(
+    X_train,
+    y_train,
+    validation_split=0.2,
+    shuffle=True,
+    epochs=1,
+    verbose=1)
+
+plt.plot(history_object.history['loss'])
+plt.plot(history_object.history['val_loss'])
+
+plt.title('Model MSE Loss')
+plt.ylabel('Mean Squared Error (MSE) Loss')
+plt.xlabel('Epoch')
+
+plt.legend(['Training Set', 'Validation Set'], loc='upper right')
+
+plt.show()
 
 model.save('model.h5')
-
-# Augment data with recovery laps showing only corrections
-# Record extra laps
-    # 2-3 good laps with center driving
-    # 1 recovery lap
-    # 1 lap very smooth in curves
-    # ? in opposite direction
-# Can visualize history with pyplot graphs
-# Use generators to load data on demand
-# Record video of 1+ autonomous laps
