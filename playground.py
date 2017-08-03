@@ -6,25 +6,46 @@ from keras.layers import Flatten, Dense, Lambda
 from keras.layers.convolutional import Conv2D
 from keras.layers.pooling import MaxPooling2D
 
-lines = []
-with open('./data/driving_log.csv') as csvfile:
-  reader = csv.reader(csvfile)
-  next(reader)
-  for line in reader:
-    lines.append(line)
-
 images = []
 measurements = []
-for line in lines:
-  image = cv2.imread('./data/IMG/' + line[0].split('/')[-1])
-  images.append(image)
-  measurement = float(line[3])
-  measurements.append(measurement)
+with open('./data/driving_log.csv') as csvfile:
+    reader = csv.reader(csvfile)
+    next(reader) # Skip column names
 
-  # Data augmentation
-  # Add L-R mirrored image to balance steering bias
-  images.append(np.fliplr(image))
-  measurements.append(-measurement)
+    for row in reader:
+        correction = 0.2
+        steering_center = float(row[3])
+        steering_left = steering_center + correction    # Turn right
+        steering_right = steering_center - correction   # Turn left
+
+        steering_center_flip = -steering_center
+        steering_left_flip = -steering_left
+        steering_right_flip = -steering_right
+
+        directory = './data/'
+
+        img_center = cv2.imread(directory + row[0].lstrip())
+        img_left = cv2.imread(directory + row[1].lstrip())
+        img_right = cv2.imread(directory + row[2].lstrip())
+
+        img_center_flip = np.fliplr(img_center)
+        img_left_flip = np.fliplr(img_left)
+        img_right_flip = np.fliplr(img_right)
+
+        images.extend([
+            img_center,
+            img_center_flip,
+            img_left,
+            img_left_flip,
+            img_right,
+            img_right_flip])
+        measurements.extend([
+            steering_center,
+            steering_center_flip,
+            steering_left,
+            steering_left_flip,
+            steering_right,
+            steering_right_flip])
 
 
 X_train = np.array(images)
