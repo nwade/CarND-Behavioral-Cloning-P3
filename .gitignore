@@ -5,3 +5,4 @@ mac_sim*
 data.zip
 *.swp
 *.h5
+.vscode
